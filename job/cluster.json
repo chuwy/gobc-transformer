@@ -1,0 +1,68 @@
+{
+  "schema": "iglu:com.snowplowanalytics.dataflowrunner/ClusterConfig/avro/1-1-0",
+  "data": {
+    "name": "gobc - example",
+    "logUri": "s3://cara-gobc-sample-log/logs/",
+    "region": "ca-central-1",
+    "credentials": {
+      "accessKeyId": "env",
+      "secretAccessKey": "env"
+    },
+    "roles": {
+      "jobflow": "EMR_EC2_DefaultRole",
+      "service": "EMR_DefaultRole"
+    },
+    "ec2": {
+      "amiVersion": "5.9.0",
+      "keyName": "anton-ca-central",
+      "location": {
+        "vpc": {
+          "subnetId": "subnet-e1807788"
+        }
+      },
+      "instances": {
+        "master": {
+          "type": "m4.xlarge"
+        },
+        "core": {
+          "type": "m4.xlarge",
+          "count": 1
+        },
+        "task": {
+          "type": "m1.medium",
+          "count": 0,
+          "bid": "0.015"
+        }
+      }
+    },
+    "tags": [ ],
+    "bootstrapActionConfigs": [ ],
+    "configurations": [
+      {
+        "classification":"core-site",
+        "properties":{
+          "Io.file.buffer.size":"65536"
+        }
+      },
+      {
+        "classification":"mapred-site",
+        "properties":{
+          "Mapreduce.user.classpath.first":"true"
+        }
+      },
+      {
+        "classification":"yarn-site",
+        "properties":{
+          "yarn.resourcemanager.am.max-attempts":"1"
+        }
+      },
+      {
+        "classification":"spark",
+        "properties":{
+          "maximizeResourceAllocation":"true"
+        }
+      }
+    ],
+    "applications": [ "Hadoop", "Spark" ]
+  }
+}

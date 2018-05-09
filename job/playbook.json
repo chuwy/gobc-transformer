@@ -1,0 +1,36 @@
+{
+  "schema": "iglu:com.snowplowanalytics.dataflowrunner/PlaybookConfig/avro/1-0-1",
+  "data": {
+    "region": "ca-central-1",
+    "credentials": {
+      "accessKeyId": "env",
+      "secretAccessKey": "env"
+    },
+    "steps": [
+      {
+        "type":"CUSTOM_JAR",
+        "name":"GOBC Transformer",
+        "actionOnFailure":"CANCEL_AND_WAIT",
+        "jar":"command-runner.jar",
+        "arguments":[
+          "spark-submit",
+          "--deploy-mode",
+          "cluster",
+          "--class",
+          "com.snowplowanalytics.bgoctransformer.Main",
+
+          "s3://cara-gobc-sample-log/jars/bgoctransformer-0.1.0-rc1.jar",
+
+          "--input",
+          "s3n://cara-gobc-sample-log/input/*",
+          "--output",
+          "s3n://cara-gobc-sample-log/output/",
+          "--badOutput",
+          "s3n://cara-gobc-sample-log/bad/",
+          "--geoIpEnrichmentConfig",
+          "{{base64File "./enrichment.json"}}"
+        ]
+      }
+    ]
+  }
+}
